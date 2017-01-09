@@ -7,28 +7,29 @@ function makeGraphs(error, noaaJson) {
 	
 	//Clean projectsJson data
 	var mynoaadata = noaaJson;
-	var dateFormat = d3.time.format("%Y%m%d%H%M");
+	//var dateFormat = d3.time.format("%Y%m%d%H%M");
+	var dateFormat = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
 	mynoaadata.forEach(function(d) {
-		d["ts"] = dateFormat.parse(d["ts"]);
+		d["time"] = dateFormat.parse(d["time"]);
 	});
 
 	//Create a Crossfilter instance
 	var ndx = crossfilter(mynoaadata);
 
 	//Define Dimensions
-	var dateDim = ndx.dimension(function(d) { return d["ts"]; });
+	var dateDim = ndx.dimension(function(d) { return d["time"]; });
 	var tempDim = ndx.dimension(function(d) { return d["TEMP"]; });
 
     var loctemp = dateDim.group().reduceSum(function(d) { return d["TEMP"]; }); 
 
     
 	//Define values (to be used in charts)
-	var minDate = dateDim.bottom(1)[0]["ts"];
-	var maxDate = dateDim.top(1)[0]["ts"];
+	var minDate = dateDim.bottom(1)[0]["time"];
+	var maxDate = dateDim.top(1)[0]["time"];
 
     	var minTemp = tempDim.bottom(1)[0]["TEMP"];
 	var maxTemp = tempDim.top(1)[0]["TEMP"];
-    console.log(loctemp.size());
+    console.log(mynoaadata[0]);
     
     //Charts
 	var timeChart = dc.barChart("#time-chart");
