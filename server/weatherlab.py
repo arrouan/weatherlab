@@ -6,9 +6,6 @@ from flask import render_template
 from influxdb import InfluxDBClient
 
 import json
-from bson import json_util
-from bson.json_util import dumps
-
 
 app = Flask(__name__)
 
@@ -21,12 +18,13 @@ def index():
 def noaa_data():
   # # open database
   dbname='noaa'
-  client = InfluxDBClient(database=dbname)
+
+  client = InfluxDBClient(database=dbname, host="influx")
 
   query = 'select TEMP from boulder;'
   result = client.query(query)
   json_res = list(result.get_points(measurement='boulder'))
-  json_temp = json.dumps(json_res,default=json_util.default)
+  json_temp = json.dumps(json_res)
 
   return json_temp
 
