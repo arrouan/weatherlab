@@ -1,7 +1,17 @@
 version: '2'
 services:
+  client:
+    build: ./client
+    image: 'weatherlab-client:latest'
+    container_name: "weatherlab-client"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./client/src:/app/src"
+    command: ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack_config.js --hot --inline
   server:
     build: ./server
+    image: weatherlab-server:latest
     container_name: "weatherlab-server"
     ports:
       - "5000:5000"
