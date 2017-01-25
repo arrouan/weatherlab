@@ -23,7 +23,7 @@ def noaa_data():
 
   client = InfluxDBClient(database=dbname, host="influx")
 
-  query = "select mean(TEMP) from boulder where time >= '2016-01-01T00:00:00Z' AND time <= '2016-02-01T00:00:00Z' group by time(2d);"
+  query = "select mean(TEMP) from boulder where time >= '2016-01-01T00:00:00Z' AND time <= '2016-12-01T00:00:00Z' group by time(5d);"
   result = client.query(query)
   json_res = list(result.get_points(measurement='boulder'))
   json_temp = json.dumps(json_res)
